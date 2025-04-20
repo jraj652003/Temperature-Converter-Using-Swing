@@ -5,17 +5,31 @@
  */
 package com.mycompany.temperatureconverterusingswing;
 
+import com.mycompany.temperatureconverterusingswing.model.TemperatureUnit;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author jayar
  */
 public class TemperatureConverterJFrame extends javax.swing.JFrame {
+    
+    DefaultListModel<String> tempUnitModel;
 
     /**
      * Creates new form TemperatureConverterJFrame
      */
     public TemperatureConverterJFrame() {
         initComponents();
+        
+        tempUnitModel = new DefaultListModel<>();
+        lstTempFrom.setModel(tempUnitModel);
+        lstTempTo.setModel(tempUnitModel);
+        
+        TemperatureUnit[] tempUnits = TemperatureUnit.values();
+        for (TemperatureUnit unit : tempUnits) {
+            tempUnitModel.addElement(unit.toString());
+        }
     }
 
     /**
