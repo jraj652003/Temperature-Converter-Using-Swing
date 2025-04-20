@@ -5,7 +5,9 @@
  */
 package com.mycompany.temperatureconverterusingswing;
 
+import com.mycompany.temperatureconverterusingswing.model.Temperature;
 import com.mycompany.temperatureconverterusingswing.model.TemperatureUnit;
+import com.mycompany.temperatureconverterusingswing.service.TemperatureConversionService;
 import javax.swing.DefaultListModel;
 
 /**
@@ -14,7 +16,8 @@ import javax.swing.DefaultListModel;
  */
 public class TemperatureConverterJFrame extends javax.swing.JFrame {
     
-    DefaultListModel<String> tempUnitModel;
+    DefaultListModel<TemperatureUnit> tempUnitModel;
+    TemperatureConversionService tempConvServ;
 
     /**
      * Creates new form TemperatureConverterJFrame
@@ -22,13 +25,15 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
     public TemperatureConverterJFrame() {
         initComponents();
         
+        tempConvServ = new TemperatureConversionService();
+        
         tempUnitModel = new DefaultListModel<>();
         lstTempFrom.setModel(tempUnitModel);
         lstTempTo.setModel(tempUnitModel);
         
         TemperatureUnit[] tempUnits = TemperatureUnit.values();
         for (TemperatureUnit unit : tempUnits) {
-            tempUnitModel.addElement(unit.toString());
+            tempUnitModel.addElement(unit);
         }
     }
 
@@ -69,9 +74,21 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
         txtfldTempTo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         lstTempFrom.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lstTempFrom.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstTempFrom.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstTempFromValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(lstTempFrom);
 
         lstTempTo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lstTempTo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstTempTo.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstTempToValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(lstTempTo);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -140,6 +157,18 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void lstTempFromValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstTempFromValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            TemperatureConversion();
+        }        
+    }//GEN-LAST:event_lstTempFromValueChanged
+
+    private void lstTempToValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstTempToValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            TemperatureConversion();
+        }
+    }//GEN-LAST:event_lstTempToValueChanged
+
     /**
      * @param args the command line arguments
      */
@@ -174,6 +203,25 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void TemperatureConversion() {
+        TemperatureUnit tempFromUnit = lstTempFrom.getSelectedValue();
+        TemperatureUnit tempToUnit = lstTempTo.getSelectedValue();
+        
+        if (tempFromUnit != null && tempToUnit != null) {
+            String tempFrom = txtfldTempFrom.getText();
+            
+            if (tempFromUnit == tempToUnit) {
+                lbelResult.setText(tempFrom + " " + tempFromUnit + " = " + tempFrom + " " + tempToUnit);
+                txtfldTempTo.setText(tempFrom);
+            } else {
+                Temperature tempFr = new Temperature(Integer.valueOf(tempFrom), tempFromUnit);
+                Temperature tempTo = tempConvServ.convert(tempFr, tempToUnit);
+                lbelResult.setText(String.format("%.2f %s = %.2f %s", tempFr.getValue(), tempFromUnit, tempTo.getValue(), tempToUnit));
+                txtfldTempTo.setText(String.valueOf(tempTo.getValue()));
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -183,8 +231,8 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbelResult;
-    private javax.swing.JList<String> lstTempFrom;
-    private javax.swing.JList<String> lstTempTo;
+    private javax.swing.JList<TemperatureUnit> lstTempFrom;
+    private javax.swing.JList<TemperatureUnit> lstTempTo;
     private javax.swing.JTextField txtfldTempFrom;
     private javax.swing.JTextField txtfldTempTo;
     // End of variables declaration//GEN-END:variables
