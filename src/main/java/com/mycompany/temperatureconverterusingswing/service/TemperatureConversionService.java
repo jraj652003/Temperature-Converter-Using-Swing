@@ -6,8 +6,8 @@
 package com.mycompany.temperatureconverterusingswing.service;
 
 import com.mycompany.temperatureconverterusingswing.conversion.TemperatureConversion;
-import com.mycompany.temperatureconverterusingswing.converter.implementation.CelsiusToFahrenheitConversion;
-import com.mycompany.temperatureconverterusingswing.converter.implementation.FahrenheitToCelsiusConversion;
+import com.mycompany.temperatureconverterusingswing.conversion.implementation.CelsiusToFahrenheitConversion;
+import com.mycompany.temperatureconverterusingswing.conversion.implementation.FahrenheitToCelsiusConversion;
 import com.mycompany.temperatureconverterusingswing.model.Temperature;
 import com.mycompany.temperatureconverterusingswing.model.TemperatureUnit;
 import java.util.Map;
