@@ -5,7 +5,7 @@
  */
 package com.mycompany.temperatureconverterusingswing.service;
 
-import com.mycompany.temperatureconverterusingswing.converter.TemperatureConversion;
+import com.mycompany.temperatureconverterusingswing.conversion.TemperatureConversion;
 import com.mycompany.temperatureconverterusingswing.converter.implementation.CelsiusToFahrenheitConversion;
 import com.mycompany.temperatureconverterusingswing.converter.implementation.FahrenheitToCelsiusConversion;
 import com.mycompany.temperatureconverterusingswing.model.Temperature;

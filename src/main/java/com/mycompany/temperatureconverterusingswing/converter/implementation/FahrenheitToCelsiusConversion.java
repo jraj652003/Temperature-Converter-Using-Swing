@@ -5,7 +5,7 @@
  */
 package com.mycompany.temperatureconverterusingswing.converter.implementation;
 
-import com.mycompany.temperatureconverterusingswing.converter.TemperatureConversion;
+import com.mycompany.temperatureconverterusingswing.conversion.TemperatureConversion;
 
 /**
  *

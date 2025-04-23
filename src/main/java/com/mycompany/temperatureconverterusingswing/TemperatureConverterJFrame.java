@@ -9,6 +9,7 @@ import com.mycompany.temperatureconverterusingswing.model.Temperature;
 import com.mycompany.temperatureconverterusingswing.model.TemperatureUnit;
 import com.mycompany.temperatureconverterusingswing.service.TemperatureConversionService;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -69,6 +70,11 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
         jLabel2.setText("To:");
 
         txtfldTempFrom.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtfldTempFrom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtfldTempFromKeyReleased(evt);
+            }
+        });
 
         txtfldTempTo.setEditable(false);
         txtfldTempTo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -169,6 +175,10 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_lstTempToValueChanged
 
+    private void txtfldTempFromKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfldTempFromKeyReleased
+        TemperatureConversion();
+    }//GEN-LAST:event_txtfldTempFromKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -207,21 +217,33 @@ public class TemperatureConverterJFrame extends javax.swing.JFrame {
     private void TemperatureConversion() {
         TemperatureUnit tempFromUnit = lstTempFrom.getSelectedValue();
         TemperatureUnit tempToUnit = lstTempTo.getSelectedValue();
+        String tempFrom = txtfldTempFrom.getText();
         
-        if (tempFromUnit != null && tempToUnit != null) {
-            String tempFrom = txtfldTempFrom.getText();
-            
-            if (tempFromUnit == tempToUnit) {
-                lbelResult.setText(tempFrom + " " + tempFromUnit + " = " + tempFrom + " " + tempToUnit);
-                txtfldTempTo.setText(tempFrom);
-            } else {
-                Temperature tempFr = new Temperature(Integer.valueOf(tempFrom), tempFromUnit);
-                Temperature tempTo = tempConvServ.convert(tempFr, tempToUnit);
-                lbelResult.setText(String.format("%.2f %s = %.2f %s", tempFr.getValue(), tempFromUnit, tempTo.getValue(), tempToUnit));
-                txtfldTempTo.setText(String.valueOf(tempTo.getValue()));
+        
+        if (!"".equals(tempFrom)) {
+            try {
+                double temp = Double.valueOf(tempFrom);
+
+                if (tempFromUnit != null && tempToUnit != null) {
+                    if (tempFromUnit == tempToUnit) {
+                        lbelResult.setText(temp + " " + tempFromUnit + " = " + temp + " " + tempToUnit);
+                        txtfldTempTo.setText(String.valueOf(temp));
+                    } else {
+                        Temperature tempFr = new Temperature(temp, tempFromUnit);
+                        Temperature tempTo = tempConvServ.convert(tempFr, tempToUnit);
+                        lbelResult.setText(String.format("%.2f %s = %.2f %s", tempFr.getValue(), tempFromUnit, tempTo.getValue(), tempToUnit));
+                        txtfldTempTo.setText(String.format("%.2f", tempTo.getValue()));
+                    }
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Please Enter numbers onley...", "Error", JOptionPane.ERROR_MESSAGE);
+                txtfldTempFrom.setText("");
+                txtfldTempTo.setText("");
+                lbelResult.setText("");
             }
         }
     }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
